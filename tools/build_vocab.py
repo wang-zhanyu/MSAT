@@ -148,7 +148,7 @@ def get_mlc_label(args):
 
 
 def main(args):
-    vocab = build_vocab(args.caption_path, threshold=args.threshold)
+    vocab = build_vocab(args.annotation, threshold=args.threshold)
     vocab_path = args.vocab_path
     with open(os.path.join(args.save_path, vocab_path), 'w') as f:
         json.dump(vocab, f)
@@ -158,7 +158,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--caption_path', type=str,
+    parser.add_argument('--annotation', type=str,
                         default='data/mimic/mimic.json',
                         help='path for train annotation file')
     parser.add_argument('--save_path', type=str, default='./data/mimic',

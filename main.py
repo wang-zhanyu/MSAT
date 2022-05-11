@@ -99,7 +99,7 @@ class Trainer(object):
 
         if self.args.resume > 0:
             self.model.load_state_dict(
-                torch.load(self.snapshot_path("caption_model", self.args.resume),
+                torch.load(self.args.resume,
                            map_location=lambda storage, loc: storage)
             )
 
@@ -139,11 +139,11 @@ class Trainer(object):
         snapshot_folder = os.path.join(cfg.ROOT_DIR, 'snapshot')
         if not os.path.exists(snapshot_folder):
             os.mkdir(snapshot_folder)
-        torch.save(self.model.state_dict(), self.snapshot_path("caption_model", epoch + 1))
+        torch.save(self.model.state_dict(), self.snapshot_path("model", epoch + 1))
         if save_file_queue.full():
             remove_file = save_file_queue.get_nowait()
             os.remove(remove_file)
-        save_file_queue.put_nowait(self.snapshot_path("caption_model", epoch + 1))
+        save_file_queue.put_nowait(self.snapshot_path("model", epoch + 1))
 
     def make_kwargs(self, indices, input_seq, target_seq, gv_feat, att_feats, att_mask, mlc_label):
         seq_mask = (input_seq > 0).type(torch.cuda.LongTensor)
