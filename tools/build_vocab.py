@@ -75,7 +75,7 @@ def build_vocab(cap_path, threshold):
 
 
 def cap2idx(args, vocab):
-    data = json.load(open(args.cap_path, 'r'))
+    data = json.load(open(args.annotation, 'r'))
     data = data['images']
     mimic_train_input = {}
     mimic_train_target = {}
@@ -123,10 +123,13 @@ def cap2idx(args, vocab):
 
 def get_mlc_label(args):
     max_len = 768
-    data = json.load(open(args.cap_path, 'r'))
-    mlc_label = json.load(open(args.mlc_label_path, 'r'))
-    mlc_label = sorted(mlc_label.items(), key=lambda x:x[1], reverse=True)
-    mlc_label = [i for i in mlc_label][:max_len]
+    data = json.load(open(args.annotation, 'r'))
+    radgraph = json.load(open(args.radgraph, 'r'))
+    tokens = [j['tokens'] for k, v in radgraph.items() for i, j in v.items() for x, y in j.items()]
+    tokens = list(set(tokens))
+    mlc_label = Counter(tokens)
+    mlc_label = sorted(mlc_label.items(), key=lambda x: x[1], reverse=True)
+    mlc_label = [i[0] for i in mlc_label][:max_len]
     shuffle(mlc_label)
     label2idx = {label: i for i, label in enumerate(mlc_label)}
     data = data['images']
@@ -163,7 +166,7 @@ if __name__ == '__main__':
                         help='path for train annotation file')
     parser.add_argument('--save_path', type=str, default='./data/mimic',
                         help='path for saving vocabulary wrapper')
-    parser.add_argument('--mlc_label_path', type=str, default='data/mimic/mimic_mlc_label_dict.pkl',
+    parser.add_argument('--radgraph', type=str, default='data/mimic/MIMIC-CXR_graphs.json',
                         help='path for saving vocabulary wrapper')
     parser.add_argument('--threshold', type=int, default=5,
                         help='minimum word count threshold')
