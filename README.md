@@ -14,13 +14,15 @@ Radiographic Report Generation"
 
 ## Requirements
 * Python 3
-* CUDA 10
-* numpy
+* CUDA 11
 * tqdm
 * easydict
 * psutil
-* [PyTorch](http://pytorch.org/) (>1.0)
-* [torchvision](http://pytorch.org/)
+* ftfy
+* regex
+* tqdm
+* PyTorch=1.7.1
+* torchvision
 
 ## Data preparation
 1. Download the [mimic_cxr dataset](https://drive.google.com/file/d/1DS6NYirOXQf8qYieSVMvqNwuOlgAbM_E/view?usp=sharing) and extract clip features

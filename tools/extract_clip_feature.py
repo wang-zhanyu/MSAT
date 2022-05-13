@@ -1,11 +1,11 @@
 import torch
-import clip
 from PIL import Image
 import json
 import numpy as np
 import os
 from tqdm import tqdm
 import argparse
+from tools.CLIP import clip
 
 
 def get_embeddings(args):
