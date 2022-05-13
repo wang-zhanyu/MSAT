@@ -4,6 +4,7 @@ import json
 import torch.utils.data as data
 import pickle
 from lib.config import cfg
+import os
 
 
 class MimicDataset(data.Dataset):
@@ -47,6 +48,7 @@ class MimicDataset(data.Dataset):
     def __getitem__(self, index):
         image_id = self.image_ids[index]
         att_feats = np.load(self.id2path[image_id])['feature']
+        # att_feats = np.load(os.path.join(r'E:/x_linear (miccai2022)', self.id2path[image_id]))['feature']
         att_feats = np.array(att_feats).astype('float32')
 
         if self.gv_load_method == 'first':

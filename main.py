@@ -82,7 +82,7 @@ class Trainer(object):
         self.logger.addHandler(fh)
 
         self.logger.info('Training with config:')
-        self.logger.info(pprint.pformat(cfg))
+        self.logger.info(pprint(cfg))
 
     def setup_network(self):
         model = models.create(cfg.MODEL.TYPE)
@@ -210,8 +210,6 @@ class Trainer(object):
             kwargs[cfg.PARAM.GLOBAL_FEAT] = gv_feat
             kwargs[cfg.PARAM.ATT_FEATS] = att_feats
             kwargs[cfg.PARAM.ATT_FEATS_MASK] = att_mask
-            kwargs[cfg.PARAM.SUB_SEQ] = sub_seq
-            kwargs[cfg.PARAM.TOKEN_TYPE_IDS] = token_type_ids
 
             self.model.eval()
             with torch.no_grad():
@@ -224,16 +222,12 @@ class Trainer(object):
             gv_feat = utils.expand_tensor(gv_feat, cfg.DATA_LOADER.SEQ_PER_IMG)
             att_feats = utils.expand_tensor(att_feats, cfg.DATA_LOADER.SEQ_PER_IMG)
             att_mask = utils.expand_tensor(att_mask, cfg.DATA_LOADER.SEQ_PER_IMG)
-            sub_seq = utils.expand_tensor(sub_seq, cfg.DATA_LOADER.SEQ_PER_IMG)
-            token_type_ids = utils.expand_tensor(token_type_ids, cfg.DATA_LOADER.SEQ_PER_IMG)
             # sample
             kwargs['BEAM_SIZE'] = 1
             kwargs['GREEDY_DECODE'] = False
             kwargs[cfg.PARAM.GLOBAL_FEAT] = gv_feat
             kwargs[cfg.PARAM.ATT_FEATS] = att_feats
             kwargs[cfg.PARAM.ATT_FEATS_MASK] = att_mask
-            kwargs[cfg.PARAM.SUB_SEQ] = sub_seq
-            kwargs[cfg.PARAM.TOKEN_TYPE_IDS] = token_type_ids
 
             seq_sample, logP_sample = self.model.module.decode(**kwargs)
             rewards_sample, rewards_info_sample = self.scorer(ids, seq_sample.data.cpu().numpy().tolist())
@@ -270,7 +264,7 @@ class Trainer(object):
                        mlc_label) in enumerate(self.training_loader):
                 data_time.update(time.time() - start)
                 input_seq, target_seq, gv_feat = input_seq.cuda(), target_seq.cuda(), gv_feat.cuda()
-                att_feats, att_mask, mlc_label = att_feats.cuda(), mlc_label.cuda(), att_mask.cuda()
+                att_feats, att_mask, mlc_label = att_feats.cuda(), att_mask.cuda(), mlc_label.cuda()
 
                 kwargs = self.make_kwargs(indices, input_seq, target_seq, gv_feat, att_feats, att_mask, mlc_label)
                 loss, loss_info = self.forward(kwargs)

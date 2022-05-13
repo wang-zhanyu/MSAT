@@ -66,9 +66,6 @@ class Evaler(object):
                     att_mask = (att_mask[0].cuda(), att_mask[1].cuda())
                 else:
                     att_mask = att_mask.cuda()
-                if sub_seq is not None:
-                    sub_seq = sub_seq.cuda()
-                    token_type_ids = token_type_ids.cuda()
                 kwargs = self.make_kwargs(indices, gv_feat, att_feats, att_mask)
                 if kwargs['BEAM_SIZE'] > 1:
                     seq, _ = model.module.decode_beam(**kwargs)

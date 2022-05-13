@@ -32,6 +32,7 @@ MODEL:
   TYPE: 'XTransformer'
   SEQ_LEN: 60
   VOCAB_SIZE: 5412
+  MLC_WEIGHT: 5
   ########## word embedding ##########
   WORD_EMBED_DIM: 768
   WORD_EMBED_ACT: 'CELU'

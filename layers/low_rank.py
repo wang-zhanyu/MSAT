@@ -104,6 +104,12 @@ class LowRank(nn.Module):
             k = key
             v2 = value2
 
+        m_k = np.sqrt(self.head_dim) * self.m_k.expand(batch_size, cfg.MODEL.MEMORY_NUM, self.num_heads * self.head_dim).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
+        m_v = np.sqrt(cfg.MODEL.MEMORY_NUM) * self.m_v.expand(batch_size, cfg.MODEL.MEMORY_NUM, self.num_heads * self.head_dim).view(batch_size, -1, self.num_heads, self.head_dim).transpose(1, 2)
+        k = torch.cat([k, m_k], -2)
+        v2 = torch.cat([v2, m_v], -2)
+        mask = torch.cat((mask, mask[:, :cfg.MODEL.MEMORY_NUM]), dim=-1)
+
         attn_map = q.unsqueeze(-2) * k
         attn = self.attn_net(attn_map, mask, v1, v2)
         attn = attn.view(batch_size, self.num_heads * self.head_dim)

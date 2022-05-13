@@ -1,8 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from lib.config import cfg
-import lib.utils as utils
+
 
 class BasicAtt(nn.Module):
     def __init__(self, mid_dims, mid_dropout):

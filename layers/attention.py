@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from lib.config import cfg
-import lib.utils as utils
+
 
 class Attention(nn.Module):
     def __init__(self):
