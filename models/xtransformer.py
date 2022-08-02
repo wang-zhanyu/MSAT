@@ -296,7 +296,7 @@ class Encoder(nn.Module):
         self.generator = nn.Linear(embed_dim, embed_dim)
         self.dropout_lm = nn.Dropout(cfg.MODEL.DROPOUT_LM)
 
-        # self.mem_k = init_parameter((cfg.MODEL.MEMORY_DIM, embed_dim), embed_dim)
+        self.mem_k = init_parameter((cfg.MODEL.MEMORY_DIM, embed_dim), embed_dim)
         self.proj_norm = nn.Sequential(
             nn.Linear(embed_dim * (layer_num + 1), embed_dim),
             torch.nn.LayerNorm(embed_dim))
@@ -305,10 +305,10 @@ class Encoder(nn.Module):
         gx = (torch.sum(x * mask.unsqueeze(-1), 1) / torch.sum(mask.unsqueeze(-1), 1))
         gx_arr = [gx]
 
-        # batch_size = gx.shape[0]
-        # mem_k = self.mem_k.expand(batch_size, -1, -1)
-        # x = torch.cat((mem_k, x), dim=1)
-        # mask = torch.cat((mask, mask[:, :mem_k.shape[1]]), dim=1)
+        batch_size = gx.shape[0]
+        mem_k = self.mem_k.expand(batch_size, -1, -1)
+        x = torch.cat((mem_k, x), dim=1)
+        mask = torch.cat((mask, mask[:, :mem_k.shape[1]]), dim=1)
 
         for layer in self.layers[:-1]:
             gx, x = layer(gx, x, mask)
