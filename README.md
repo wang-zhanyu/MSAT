@@ -25,7 +25,7 @@ Radiographic Report Generation"
 * torchvision
 
 ## Data preparation
-1. Download the [mimic_cxr dataset](https://drive.google.com/file/d/1DS6NYirOXQf8qYieSVMvqNwuOlgAbM_E/view?usp=sharing) and extract clip features
+1. Extract clip features: Download the [images](https://physionet.org/content/mimic-cxr-jpg/2.0.0/) and our preprocessed [annoatation.json](https://drive.google.com/file/d/1tprXEHk1eXI0-Uh6c0Y4LzyCYaeLQ6zd/view?usp=sharing) file.
 ```
 python tools/extract_clip_feature.py --annotation mimic_cxr/annotation.json --save_path ./data/feature/mimic_clip16_att_512
 ```
